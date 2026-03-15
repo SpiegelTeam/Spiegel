@@ -19,11 +19,17 @@
 }
 .container div.nav {
   grid-area: menu;
+  height:max-content;
 }
 .container div.content {
   grid-area: content;
+  height:max-content;
 }
 .container div.footer {
   grid-area: footer;
   text-align: center;  
+}
+
+li{
+  font-size: 20px;
 }

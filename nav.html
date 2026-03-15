@@ -4,15 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>navbar</title>
-    <link rel="stylesheet" href="style.css">
 </head>
+<style>
+ul{
+    width:200px;
+    list-style:none;
+}
+
+li a{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    width:100%;
+    margin:5px 0;
+}
+
+img{
+    height:25px;
+    width:25px;
+}
+</style>
 <body>
 
 <ul>
-    <li><a href="cart.html">cart</a></li>
-    <li><a href="reflections.html">reflections</a></li>
-    <li><a href="browsing.html">browse</a></li>
-    <li><a href="settings.html">settings</a></li>
+    <li><a href="cart.html">cart <img src="images/cart.png"></a></li>
+    <li><a href="reflections.html">reflections <img src="images/reflections.png"></a></li>
+    <li><a href="browsing.html">browse <img src="images/search.png"></a></li>
+    <li><a href="settings.html">settings <img src="images/settings.png"></a></li>
 </ul>
 
 </body>
