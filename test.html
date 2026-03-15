@@ -19,7 +19,7 @@ a {
   z-index: 1; /* Stay on top */
   top: 0;
   left: 0;
-  background-color: #111; /* Black*/
+  background-color: #ffffff; /* Black*/
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 60px; /* Place content 60px from the top */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
@@ -30,7 +30,7 @@ a {
   padding: 8px 8px 12px 32px;
   text-decoration: none;
   font-size: 25px;
-  color: #818181;
+  color: #1D4238;
   display: block;
   transition: 0.3s;
 }
@@ -53,14 +53,14 @@ a {
 .openbtn {
   font-size: 20px;
   cursor: pointer;
-  background-color: #111;
-  color: white;
+  background-color: #ffffff;
+  color: #1D4238;
   padding: 10px 15px;
   border: none;
 }
 
 .openbtn:hover {
-  background-color: #444;
+  background-color: #fff;
 }
 </style>
 <body>
@@ -84,7 +84,8 @@ function openNav() {
 
 /* Set the width of the sidebar to 0 (hide it) */
 function closeNav() {
-  document.getElementById("mySidepanel").style.width = "80px";
+  document.getElementById("mySidepanel").style.width = "80px"
+  document.getElementById("mySidepanel").style.color = 'blue';
 }
 </script>
 
