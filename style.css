@@ -12,12 +12,20 @@ body {
     display: grid;
     margin: 0;
     grid-template-columns: 65px 1fr;
+    /*Grid stuff*/
     grid-template-areas: auto auto 1fr 1fr;
     grid-template-rows: auto auto 1fr;
     grid-template-areas: 
     "sidebar navbar"
     "sidebar categories"
     "sidebar main";
+    /*Use this instead if youre deleting categories tab for a page
+    grid-template-areas: auto 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: 
+    "sidebar navbar"
+    "sidebar main";
+    If you're adding more grids just search up how it works*/
 }
 
 .sidebar {
