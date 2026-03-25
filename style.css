@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import "https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css";
+
 
 * {
     margin: 0;
@@ -11,6 +13,7 @@ body {
     min-height: 100vh;
     display: grid;
     margin: 0;
+    background: #fff;
     grid-template-columns: 65px 1fr;
     /*Grid stuff*/
     grid-template-areas: auto auto 1fr 1fr;
@@ -56,6 +59,7 @@ body {
 .sidebar-header {
     display: flex;
     align-items: center;
+    overflow-x: hidden;
 }
 
 .sidebar-header img {
@@ -183,6 +187,7 @@ input[type="search"]::-webkit-search-results-decoration {
     right: 0;
     top: 15px;
     margin-right: 50px;
+    cursor: pointer;
 }
 
 .user-profile img {
@@ -194,6 +199,7 @@ input[type="search"]::-webkit-search-results-decoration {
     grid-area: categories;
     height: 30px;
     box-shadow: 1px 1px 15px silver;
+    background: #fff;
 }
 
 .categories ul {
@@ -250,4 +256,54 @@ input[type="search"]::-webkit-search-results-decoration {
 
 main {
     grid-area: main;
+    padding: 1rem;
+    background: #fff;
+}
+
+/* main .main-content {
+
+}
+
+main .main-content .card {
+
+} */
+
+.grid .cell {
+    max-width: 16rem;
+}
+
+.card .card-image img {
+    object-fit: cover;
+}
+
+.card .media a button {
+    display: flex;
+}
+
+.card .media a button {
+    justify-self: end;
+}
+
+.media .media-content .fixed-grid .grid .price-right {
+    text-align: right;
+}
+
+.modal-content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal-content .box .exit-modal .exit {
+    display: flex;
+    justify-content: end;
+}
+
+.modal-content .box .exit-modal .exit i {
+    cursor: pointer;
+}
+
+.columns .column .register {
+    text-align: right;
 }
