@@ -112,7 +112,7 @@ if (isset($_POST['submit'])) {
                                     Username
                                 </label>
                                 <div class="control has-icons-left">
-                                    <input type="username" name="username" class="input" placeholder="username">
+                                    <input type="username" name="username" class="input" placeholder="username" spellcheck="false">
                                     <span class="icon is-small is-left">
                                         <i class="fa-solid fa-user"></i>
                                     </span>
@@ -125,7 +125,7 @@ if (isset($_POST['submit'])) {
                                     Email
                                 </label>
                                 <div class="control has-icons-left">
-                                    <input type="email" name="email" class="input" placeholder="john@example.com">
+                                    <input type="email" name="email" class="input" placeholder="john@example.com" spellcheck="false">
                                     <span class="icon is-small is-left">
                                         <i class="fa-solid fa-envelope"></i>
                                     </span>
@@ -137,7 +137,7 @@ if (isset($_POST['submit'])) {
                                     Password
                                 </label>
                                 <div class="control has-icons-left">
-                                    <input type="password" name="password" class="input" placeholder="password">
+                                    <input type="password" name="password" class="input" placeholder="password" spellcheck="false">
                                     <span class="icon is-small is-left">
                                         <i class="fa-solid fa-lock"></i>
                                     </span>
@@ -149,7 +149,7 @@ if (isset($_POST['submit'])) {
                                     Address
                                 </label>
                                 <div class="control has-icons-left">
-                                    <input type="address" name="address" class="input" placeholder="1273 Rockefeller St">
+                                    <input type="address" name="address" class="input" placeholder="1273 Rockefeller St" spellcheck="false">
                                     <span class="icon is-small is-left">
                                         <i class="fa-solid fa-address-book"></i>
                                     </span>

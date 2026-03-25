@@ -90,7 +90,7 @@ if (isset($_POST['submit'])) {
             <form>
                 <div class="search">
                     <span class="search-icon material-icons">search</span>
-                    <input class="search-input" type="search" placeholder="Search">
+                    <input class="search-input" type="search" placeholder="Search" spellcheck="false">
                 </div>
             </form>
             <div class="user-account">
@@ -160,34 +160,32 @@ if (isset($_POST['submit'])) {
 
 
             <div class="grid is-col-min-9">
-                <?php for ($i = 0; $i < 15; $i++) { ?>
-                    <div class="cell">
-                        <div class="card has-background-primary-dark">
-                            <div class="card-image">
-                                <figure class="image is-3by5">
-                                    <img
-                                        src="images/random_filler.png"
-                                        alt="Placeholder image" />
-                                </figure>
-                            </div>
-                            <div class="card-content">
-                                <div class="media">
-                                    <div class="media-content">
-                                        <p class="title is-4">product title</p>
-                                        <p class="is-size-6 mb-2">product description</p>
-                                        <div class="fixed-grid">
-                                            <div class="grid is-size-7">
-                                                <div class="cell">product quantity</div>
-                                                <div class="cell price-right">product price</div>
-                                            </div>
+                <div class="cell">
+                    <div class="card has-background-primary-dark">
+                        <div class="card-image">
+                            <figure class="image is-3by5">
+                                <img
+                                    src="images/random_filler.png"
+                                    alt="Placeholder image" />
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-4">product title</p>
+                                    <p class="is-size-6 mb-2">product description</p>
+                                    <div class="fixed-grid">
+                                        <div class="grid is-size-7">
+                                            <div class="cell">product quantity</div>
+                                            <div class="cell price-right">product price</div>
                                         </div>
-                                        <a href="#"><button class="button is-primary mt-5">Add to Cart</button></a>
                                     </div>
+                                    <a href="#"><button class="button is-primary mt-5">Add to Cart</button></a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <?php } ?>
+                </div>
             </div>
 
         </div>
@@ -195,7 +193,7 @@ if (isset($_POST['submit'])) {
 
     <!-- modal -->
 
-    <div class="modal is-active">
+    <div class="modal">
         <div class="modal-background">
             <div class="modal-content">
                 <div class="box has-background-primary-dark">
@@ -227,7 +225,7 @@ if (isset($_POST['submit'])) {
                                     </div>
 
                                     <div class="control has-icons-left">
-                                        <input type="email" name="email" class="input" placeholder="john@example.com">
+                                        <input type="email" name="email" class="input" placeholder="john@example.com" spellcheck="false">
                                         <span class="icon is-small is-left">
                                             <i class="fa-solid fa-envelope"></i>
                                         </span>
@@ -239,7 +237,7 @@ if (isset($_POST['submit'])) {
                                         Password
                                     </label>
                                     <div class="control has-icons-left">
-                                        <input type="password" name="password" class="input" placeholder="password">
+                                        <input type="password" name="password" class="input" placeholder="password" spellcheck="false">
                                         <span class="icon is-small is-left">
                                             <i class="fa-solid fa-lock"></i>
                                         </span>
