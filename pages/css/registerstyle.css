@@ -278,3 +278,7 @@ main .content {
     font-weight: 700;
     outline: none;
 }
+
+.control .icon i {
+    color: #c0d4cf;
+}

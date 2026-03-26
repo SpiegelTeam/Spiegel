@@ -1,10 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import "https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css";
+
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: grid;
+    margin: 0;
+    background: #fff;
+    grid-template-columns: 65px 1fr;
+    /*Grid stuff*/
+    grid-template-areas: auto 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: 
+    "sidebar main"
+    /*Use this instead if youre deleting categories tab ` a page
+    grid-template-areas: auto 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: 
+    "sidebar navbar"
+    "sidebar main";
+    If you're adding more grids just search up how it works*/
 }
 
 .sidebar {
@@ -35,6 +57,7 @@
 .sidebar-header {
     display: flex;
     align-items: center;
+    overflow-x: hidden;
 }
 
 .sidebar-header img {
@@ -95,4 +118,14 @@
     background: #ffffff2d;
     color: #fff;
     border-radius: 4px;
+}
+
+main {
+    grid-area: main;
+    padding: 1rem;
+    background: #fff;
+}
+
+/* main .main-content {
+
 }

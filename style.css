@@ -22,7 +22,7 @@ body {
     "sidebar navbar"
     "sidebar categories"
     "sidebar main";
-    /*Use this instead if youre deleting categories tab for a page
+    /*Use this instead if youre deleting categories tab ` a page
     grid-template-areas: auto 1fr 1fr;
     grid-template-rows: auto 1fr;
     grid-template-areas: 
@@ -309,4 +309,38 @@ main .main-content .card {
 
 .columns .column .register {
     text-align: right;
+    text-decoration: none;
+}
+
+.columns .column .register:hover {
+    text-decoration: underline;
+}
+
+.float-right {
+    float: right;
+}
+
+#forgot-btn {
+    text-decoration: none;
+}
+
+#forgot-btn:hover {
+    text-decoration: underline;
+}
+
+.control .icon i {
+    color: #c0d4cf;
+}
+
+label .checkbox {
+    top: 2px;
+}
+
+.faded-center {
+    display: flex;
+    text-align: center;
+}
+
+#forgot-box {
+    display: none;
 }
