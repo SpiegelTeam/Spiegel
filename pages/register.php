@@ -1,28 +1,32 @@
 <?php
+session_start(); // Mandatory for session variables
 include "../db.php";
 $message = "";
+
 if (isset($_POST['submit'])) {
     $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
+    $email    = trim($_POST['email']);
     $password = trim($_POST['password']);
-    $address = trim($_POST['address']);
-    $role = "user";
+    $address  = trim($_POST['address']);
+    $role     = "user";
 
     if (empty($username) || empty($email) || empty($password) || empty($address)) {
         $message = "Error: All fields are required.";
     } else {
-        $sql = "insert into users(username, email, pword, address, role) values ('$username', '$email', '$password', '$address', '$role')";
+        // Using Prepared Statements to prevent SQL Injection and syntax errors
+        $stmt = $conn->prepare("INSERT INTO users (username, email, pword, address, role) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $username, $email, $password, $address, $role);
 
-        $result = mysqli_query($conn, $sql);
-        if (!$result) {
-            $message = "Error: {$conn->error}";
-        } else {
+        if ($stmt->execute()) {
             $message = "Registered Successfully!";
+        } else {
+            // This will tell you exactly why the SQL failed (e.g., Duplicate Email)
+            $message = "Error: " . $stmt->error;
         }
+        $stmt->close();
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 
@@ -39,7 +43,7 @@ if (isset($_POST['submit'])) {
 <body>
     <aside class="sidebar">
         <div class="sidebar-header">
-            <a href="../index.html">
+            <a href="../index.php">
                 <img src="../images/logo.png" alt="logo">
             </a>
             <h2>SPIEGEL</h2>
@@ -47,7 +51,7 @@ if (isset($_POST['submit'])) {
 
         <ul class="sidebar-links">
             <li>
-                <a href="browsing.html">
+                <a href="index.php">
                     <span class="material-icons">
                         home
                     </span>

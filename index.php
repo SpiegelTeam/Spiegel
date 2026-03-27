@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include "db.php";
 ob_start();
 $message = "";
@@ -14,21 +14,20 @@ if (isset($_POST['submit'])) {
         $result = mysqli_query($conn, $sql);
         if ($result->num_rows > 0) {
             $row = mysqli_fetch_assoc($result);
-                if ($row['pword'] == $password) {
-                    $message = "Login Successful!";
-                    $_SESSION['user_id'] = $row['user_id'];
-                    $_SESSION['username'] = $row['username'];
-                    $_SESSION['user_role'] = $row['role'];
-                    if($_SESSION['user_role'] == "admin"){
-                        header("Location: admin/dashboard.php");
-                    }   
-                    else {
-                        echo "dashboard for user";
-                    }
+            if ($row['pword'] == $password) {
+                $message = "Login Successful!";
+                $_SESSION['user_id'] = $row['user_id'];
+                $_SESSION['username'] = $row['username'];
+                $_SESSION['user_role'] = $row['role'];
+                if ($_SESSION['user_role'] == "admin") {
+                    header("Location: admin/dashboard.php");
                 } else {
-                    $message = "Wrong Password";
+                    echo "dashboard for user";
                 }
             } else {
+                $message = "Wrong Password";
+            }
+        } else {
             $message = "There is no account registered to that email";
         }
     }
@@ -205,7 +204,7 @@ if (isset($_POST['submit'])) {
         <div class="modal-background">
             <div class="modal-content">
                 <div class="row">
-                    <div class="box has-background-primary-dark" id="login-box">        
+                    <div class="box has-background-primary-dark" id="login-box">
                         <h1 class="title is-size-3 has-text-centered my-4">Login</h1>
                         <?php if ($message): ?>
                             <div class="notification <?php echo strpos($message, 'Error') === 0 || strpos($message, 'Wrong') === 0 || strpos($message, 'There') === 0 ? 'is-danger' : 'is-success'; ?>">
@@ -214,7 +213,7 @@ if (isset($_POST['submit'])) {
                         <?php endif; ?>
                         <div class="columns is-centered">
                             <div class="column is-8">
-                                <form action="" method="post">
+                                <form action="" method="post" id="login-form">
                                     <div class="field">
                                         <div class="columns">
                                             <div class="column is-narrow">
@@ -284,11 +283,11 @@ if (isset($_POST['submit'])) {
                                             Forgot Password
                                         </label>
                                         <div class="control has-icons-left">
-                                        <input type="email" name="femail" class="input is-primary" placeholder="john@example.com" spellcheck="false">
-                                        <span class="icon is-small is-left">
-                                            <i class="fa-solid fa-envelope"></i>
-                                        </span>
-                                </div>
+                                            <input type="email" name="femail" class="input is-primary" placeholder="john@example.com" spellcheck="false">
+                                            <span class="icon is-small is-left">
+                                                <i class="fa-solid fa-envelope"></i>
+                                            </span>
+                                        </div>
                                     </div>
                                     <div class="field">
                                         <label>
@@ -311,20 +310,6 @@ if (isset($_POST['submit'])) {
     <script src="script/account-register.js" async defer></script>
     <script src="https://kit.fontawesome.com/4b57f7d9e6.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#index-login-form').on('submit', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $.ajax({
-                    type: 'POST',
-                    url: '',
-                    data: $(this).serialize()
-                });
-                return false;
-            });
-        });
-    </script>
 
 </body>
 

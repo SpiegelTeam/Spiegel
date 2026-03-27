@@ -1,19 +1,17 @@
 <?php session_start();
-if(isset($_SESSION['user_id'])){
-    if($_SESSION['user_role'] == "admin"){
-
-    }
-    else {
+if (isset($_SESSION['user_id'])) {
+    if ($_SESSION['user_role'] == "admin") {
+    } else {
         echo "Go for User Dashboard";
     }
-}
-else {
+} else {
     header("Location: ../index.php");
 }
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,6 +22,7 @@ else {
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
+
 <body>
     <aside class="sidebar">
         <div class="sidebar-header">
@@ -66,7 +65,7 @@ else {
 
     <main class="main-container">
         <div class="main-content">
-            
+
         </div>
     </main>
 
