@@ -1,5 +1,6 @@
 <?php
-include("../db.php");
+require("../php/admincheck.php");
+require("../config/db.php");
 
 $message = "";
 
@@ -16,7 +17,7 @@ if (isset($_POST['submit'])) {
     $image_name = $_FILES['image']['name'];
     $image_tmp = $_FILES['image']['tmp_name'];
 
-    move_uploaded_file($image_tmp, "../images/" . $image_name);
+    move_uploaded_file($image_tmp, "../images/products" . $image_name);
 
     # CREATE / GET BRAND
     $check_brand = mysqli_query($conn, "SELECT brand_id FROM brands WHERE brand_name='$brand_name'");

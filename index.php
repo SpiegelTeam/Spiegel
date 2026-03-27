@@ -1,6 +1,6 @@
 <?php
-session_start();
-include "db.php";
+include("config/session.php");
+require("config/db.php");
 ob_start();
 $message = "";
 if (isset($_POST['submit'])) {
