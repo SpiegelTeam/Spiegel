@@ -17,12 +17,11 @@ body {
     grid-template-columns: 65px 1fr;
     /*Grid stuff*/
     grid-template-areas: auto auto 1fr 1fr;
-    grid-template-rows: auto auto 1fr;
     grid-template-areas: 
     "sidebar navbar"
-    "sidebar categories"
     "sidebar main";
-    /*Use this instead if youre deleting categories tab for a page
+    grid-template-rows: auto 1fr;
+    /*Use this instead if youre deleting categories tab ` a page
     grid-template-areas: auto 1fr 1fr;
     grid-template-rows: auto 1fr;
     grid-template-areas: 
@@ -139,48 +138,6 @@ body {
     padding: 10px;
 }
 
-.search {
-    --padding: 15px;
-
-    width: max-content;
-    display: flex;
-    align-items: center;
-    padding: var(--padding);
-    border-radius: 28px;
-    background: #c0d4cf;
-    min-width: 50rem;
-    transition: all .2s ease;
-}
-
-.search:hover {
-    background: #90a7a0;
-}
-
-.search-input {
-    font-size: 16px;
-    font-family: "Poppins", sans-serif;
-    font-weight: 500;
-    margin-left: var(--padding);
-    outline: none;
-    border: none;
-    background: transparent;
-    flex: 1;
-}
-
-input[type=search]::-ms-clear { display: none; width : 0; height: 0; }
-input[type=search]::-ms-reveal { display: none; width : 0; height: 0; }
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration {
-    display: none;
-}
-
-
-.search-input::placeholder {
-    color: rgba(0, 0, 0, 0.25);
-}
-
 .user-account {
     display: flex;
     position: absolute;
@@ -195,70 +152,189 @@ input[type="search"]::-webkit-search-results-decoration {
     border-radius: 50%;
 }
 
-.categories {
-    grid-area: categories;
-    height: 30px;
-    background: #fff;
-    margin-top: .5rem;
+
+.cart-container {
+    padding: 40px 20px;
+    max-width: 950px;
+    margin: auto;
 }
 
-.categories ul {
-    float: left;
-    margin-left: 30px;
-    list-style: none;
-}
-
-.categories ul li {
-    display: inline-block;
-}
-
-.categories ul li a {
-    color:#395c53;
-    display: block;
-    padding: 0 15px;
-    line-height: 30px;
-    font-size: 15px;
-    background: #fff;
-    text-decoration: none;
-}
-
-.categories ul li a:hover, a.active {
-    color: #56b49d;
-    transition: 0.5s;
-}
-
-.categories ul ul {
-    position: absolute;
-    top: 145px;
-    border: 2px solid #395c53;
-    border-top: none;
-    visibility: hidden;
-}
-
-.categories ul li:hover > ul{
-    top: 135px;
-    opacity: 1;
-    visibility: visible;
-    transition: .3s linear;
-    z-index: 100;
-}
-
-.categories ul ul li {
-    width: 150px;
-    display: list-item;
-    position: relative;
-    border: 1px solid #90a7a0;
-    border-top: none;
-    z-index: inherit;
-}
-
-.categories ul ul li a {
-    line-height: 40px;
-    z-index: inherit;
+.title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 25px;
 }
 
 main {
     grid-area: main;
-    padding: 1rem;
-    background: #fff;
+    padding: 30px;
+}
+
+/* Fix spacing because of sidebar */
+.cart-container {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ================= CART ITEM ================= */
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 100px 1fr auto auto;
+    align-items: center;
+    gap: 20px;
+
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition: all 0.2s ease;
+}
+
+.cart-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+}
+
+/* ================= IMAGE ================= */
+
+.cart-item img {
+    width: 95px;
+    height: 95px;
+    object-fit: cover;
+    border-radius: 12px;
+    background: #f1f1f1;
+}
+
+/* ================= DETAILS ================= */
+
+.cart-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cart-name {
+    font-weight: 600;
+    font-size: 17px;
+    color: #222;
+}
+
+.cart-price {
+    font-size: 14px;
+    color: #777;
+}
+
+/* ================= QUANTITY ================= */
+
+.cart-qty {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cart-qty button {
+    background: #395c53;
+    border: none;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.cart-qty button:hover {
+    background: #2d4942;
+}
+
+.cart-qty span {
+    min-width: 25px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* ================= RIGHT SIDE ================= */
+
+.cart-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+/* SUBTOTAL */
+
+.cart-subtotal {
+    font-weight: 600;
+    font-size: 16px;
+    color: #111;
+}
+
+/* REMOVE BUTTON */
+
+.remove-btn {
+    background: #ffe5e5;
+    border: none;
+    color: #d63031;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.2s;
+}
+
+.remove-btn:hover {
+    background: #ffcccc;
+}
+
+/* ================= SUMMARY ================= */
+
+.cart-summary {
+    margin-top: 30px;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 16px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.cart-total {
+    font-size: 24px;
+    font-weight: 700;
+    color: #395c53;
+}
+
+/* ================= EMPTY ================= */
+
+.empty-cart {
+    text-align: center;
+    padding: 80px 20px;
+    font-size: 18px;
+    color: #777;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+
+    .cart-item {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .cart-actions {
+        align-items: center;
+    }
+
+    .cart-qty {
+        justify-content: center;
+    }
 }

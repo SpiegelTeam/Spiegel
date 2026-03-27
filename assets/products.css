@@ -54,7 +54,7 @@
 
 /* ADD TO CART BUTTON */
 
-.add-to-cart{
+.edit{
     position:absolute;
     left:50%;
     top:50%;
@@ -79,7 +79,7 @@
 
 /* SHOW BUTTON ON HOVER */
 
-.product-card:hover .add-to-cart{
+.product-card:hover .edit{
     opacity:1;
     transform:translate(-50%, -50%);
 }

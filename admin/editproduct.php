@@ -4,6 +4,35 @@ require("../config/db.php");
 
 $message = "";
 
+// ✅ GET PRODUCT ID
+if (!isset($_GET['id'])) {
+    die("No product selected");
+}
+
+$id = (int)$_GET['id'];
+
+// ✅ FETCH PRODUCT
+$product_q = mysqli_query($conn, "SELECT * FROM products WHERE item_id = '$id'");
+$product = mysqli_fetch_assoc($product_q);
+
+if (!$product) {
+    die("Product not found");
+}
+
+// ✅ GET CURRENT BRAND NAME
+$brand_q = mysqli_query($conn, "SELECT brand_name FROM brands WHERE brand_id = '{$product['brand_id']}'");
+$brand_data = mysqli_fetch_assoc($brand_q);
+$current_brand = $brand_data['brand_name'];
+
+// ✅ GET CURRENT AESTHETICS
+$current_aesthetics = [];
+$aesthetic_q = mysqli_query($conn, "SELECT aesthetic_id FROM product_aesthetics WHERE product_id = '$id'");
+while ($row = mysqli_fetch_assoc($aesthetic_q)) {
+    $current_aesthetics[] = $row['aesthetic_id'];
+}
+
+
+// ================= UPDATE LOGIC =================
 if (isset($_POST['submit'])) {
 
     $product_name = $_POST['product_name'];
@@ -13,68 +42,67 @@ if (isset($_POST['submit'])) {
     $gender = $_POST['gender'];
     $brand_name = $_POST['brand'];
 
-    # IMAGE UPLOAD
-    $image_name = $_FILES['image']['name'];
-    $image_tmp = $_FILES['image']['tmp_name'];
+    // ✅ IMAGE (optional update)
+    $image_name = $product['image'];
 
-    move_uploaded_file($image_tmp, "../images/products" . $image_name);
+    if (!empty($_FILES['image']['name'])) {
+        $image_name = $_FILES['image']['name'];
+        $image_tmp = $_FILES['image']['tmp_name'];
+        move_uploaded_file($image_tmp, "../images/products/" . $image_name);
+    }
 
-    # CREATE / GET BRAND
+    // ✅ BRAND
     $check_brand = mysqli_query($conn, "SELECT brand_id FROM brands WHERE brand_name='$brand_name'");
 
     if (mysqli_num_rows($check_brand) > 0) {
-
         $brand = mysqli_fetch_assoc($check_brand);
         $brand_id = $brand['brand_id'];
     } else {
-
         mysqli_query($conn, "INSERT INTO brands (brand_name) VALUES ('$brand_name')");
         $brand_id = mysqli_insert_id($conn);
     }
 
-    # INSERT PRODUCT
-    $product_sql = "INSERT INTO products
-(product_name,price,stock,description,image,brand_id,gender)
+    // ✅ UPDATE PRODUCT
+    mysqli_query($conn, "
+        UPDATE products SET
+        product_name='$product_name',
+        price='$price',
+        stock='$stock',
+        description='$description',
+        image='$image_name',
+        brand_id='$brand_id',
+        gender='$gender'
+        WHERE item_id='$id'
+    ");
 
-VALUES
-('$product_name','$price','$stock','$description','$image_name','$brand_id','$gender')";
+    // ✅ RESET AESTHETICS
+    mysqli_query($conn, "DELETE FROM product_aesthetics WHERE product_id='$id'");
 
-    mysqli_query($conn, $product_sql);
-
-    # GET PRODUCT ID
-    $product_id = mysqli_insert_id($conn);
-
-    # HANDLE MULTIPLE AESTHETICS
     $all_aesthetics = [];
 
     if (!empty($_POST['main_aesthetic'])) {
         $all_aesthetics = array_merge($all_aesthetics, $_POST['main_aesthetic']);
     }
-
     if (!empty($_POST['sub_aesthetic'])) {
         $all_aesthetics = array_merge($all_aesthetics, $_POST['sub_aesthetic']);
     }
-
     if (!empty($_POST['alt_aesthetic'])) {
         $all_aesthetics = array_merge($all_aesthetics, $_POST['alt_aesthetic']);
     }
-
     if (!empty($_POST['core_aesthetic'])) {
         $all_aesthetics = array_merge($all_aesthetics, $_POST['core_aesthetic']);
     }
 
     foreach ($all_aesthetics as $aesthetic_id) {
-
         mysqli_query($conn, "
-INSERT INTO product_aesthetics(product_id,aesthetic_id)
-VALUES('$product_id','$aesthetic_id')
-");
+            INSERT INTO product_aesthetics(product_id,aesthetic_id)
+            VALUES('$id','$aesthetic_id')
+        ");
     }
 
-    $message = "Product added successfully!";
+    $message = "Product updated successfully!";
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 
@@ -111,6 +139,7 @@ VALUES('$product_id','$aesthetic_id')
                     Add Product
                 </a>
             </li>
+
             <div class="sidebar-bottom">
                 <h4><span>Own Your Reflection</span></h4>
                 <li>
@@ -128,7 +157,7 @@ VALUES('$product_id','$aesthetic_id')
     <main class="container my-3">
         <div class="content">
             <div class="box has-background-primary-dark mx-6">
-                <h1 class="title is-size-3 has-text-centered my-4">Create Product</h1>
+                <h1 class="title is-size-3 has-text-centered my-4">Edit Product</h1>
                 <?php if ($message): ?>
                     <div class="notification is-success">
                         <?php echo $message; ?>
@@ -136,13 +165,14 @@ VALUES('$product_id','$aesthetic_id')
                 <?php endif; ?>
                 <div class="columns is-centered">
                     <div class="column is-8">
-                        <form action="addproduct.php" method="post" enctype="multipart/form-data">
+                        <form method="post" enctype="multipart/form-data">
                             <div class="field">
                                 <label class="label">
                                     Product Name
                                 </label>
                                 <div class="control has-icons-left">
-                                    <input type="text" name="product_name" class="input is-primary" placeholder="Product Name" spellcheck="false" required>
+                                    <input type="text" name="product_name" class="input is-primary"
+                                        value="<?php echo $product['product_name']; ?>" required>
                                 </div>
                             </div>
 
@@ -150,7 +180,7 @@ VALUES('$product_id','$aesthetic_id')
                                 <label class="label">Description</label>
 
                                 <div class="control">
-                                    <textarea class="textarea is-primary" name="description" placeholder="Write the full product description here..."></textarea>
+                                    <textarea class="textarea is-primary" name="description"><?php echo $product['description']; ?></textarea>
                                 </div>
 
                             </div>
@@ -160,7 +190,8 @@ VALUES('$product_id','$aesthetic_id')
                                     Price
                                 </label>
                                 <div class="control has-icons-left">
-                                    <input type="number" name="price" class="input is-primary" placeholder="Price" spellcheck="false" required>
+                                    <input type="number" name="price" class="input is-primary"
+                                        value="<?php echo $product['price']; ?>" required>
                                 </div>
                             </div>
 
@@ -169,7 +200,8 @@ VALUES('$product_id','$aesthetic_id')
                                     Stock
                                 </label>
                                 <div class="control has-icons-left">
-                                    <input type="number" name="stock" class="input is-primary" id="" placeholder="Stock" spellcheck="false">
+                                    <input type="number" name="stock" class="input is-primary"
+                                        value="<?php echo $product['stock']; ?>">
                                 </div>
                             </div>
 
@@ -196,7 +228,8 @@ VALUES('$product_id','$aesthetic_id')
                                         while ($row = mysqli_fetch_assoc($q)) {
                                         ?>
 
-                                            <option value="<?php echo $row['aesthetic_id']; ?>">
+                                            <option value="<?php echo $row['aesthetic_id']; ?>"
+                                                <?php if (in_array($row['aesthetic_id'], $current_aesthetics)) echo 'selected'; ?>>
                                                 <?php echo $row['aesthetic_name']; ?>
                                             </option>
 
@@ -218,7 +251,8 @@ VALUES('$product_id','$aesthetic_id')
                                         while ($row = mysqli_fetch_assoc($q)) {
                                         ?>
 
-                                            <option value="<?php echo $row['aesthetic_id']; ?>">
+                                            <option value="<?php echo $row['aesthetic_id']; ?>"
+                                                <?php if (in_array($row['aesthetic_id'], $current_aesthetics)) echo 'selected'; ?>>
                                                 <?php echo $row['aesthetic_name']; ?>
                                             </option>
 
@@ -240,7 +274,8 @@ VALUES('$product_id','$aesthetic_id')
                                         while ($row = mysqli_fetch_assoc($q)) {
                                         ?>
 
-                                            <option value="<?php echo $row['aesthetic_id']; ?>">
+                                            <option value="<?php echo $row['aesthetic_id']; ?>"
+                                                <?php if (in_array($row['aesthetic_id'], $current_aesthetics)) echo 'selected'; ?>>
                                                 <?php echo $row['aesthetic_name']; ?>
                                             </option>
 
@@ -262,7 +297,8 @@ VALUES('$product_id','$aesthetic_id')
                                         while ($row = mysqli_fetch_assoc($q)) {
                                         ?>
 
-                                            <option value="<?php echo $row['aesthetic_id']; ?>">
+                                            <option value="<?php echo $row['aesthetic_id']; ?>"
+                                                <?php if (in_array($row['aesthetic_id'], $current_aesthetics)) echo 'selected'; ?>>
                                                 <?php echo $row['aesthetic_name']; ?>
                                             </option>
 
@@ -277,13 +313,10 @@ VALUES('$product_id','$aesthetic_id')
 
                                 <div class="control">
                                     <div class="select is-fullwidth is-primary">
-                                        <select class name="gender" required>
-
-                                            <option value="">Select Gender</option>
-                                            <option value="masculine">Masculine</option>
-                                            <option value="feminine">Feminine</option>
-                                            <option value="unisex">Unisex</option>
-
+                                        <select name="gender" required>
+                                            <option value="masculine" <?php if ($product['gender'] == 'masculine') echo 'selected'; ?>>Masculine</option>
+                                            <option value="feminine" <?php if ($product['gender'] == 'feminine') echo 'selected'; ?>>Feminine</option>
+                                            <option value="unisex" <?php if ($product['gender'] == 'unisex') echo 'selected'; ?>>Unisex</option>
                                         </select>
                                     </div>
                                 </div>
@@ -293,7 +326,8 @@ VALUES('$product_id','$aesthetic_id')
                                 <label class="label">Brand</label>
 
                                 <div class="control">
-                                    <input class="input is-primary" type="text" name="brand" placeholder="Enter brand name" required>
+                                    <input class="input is-primary" type="text" name="brand"
+                                        value="<?php echo $current_brand; ?>" required>
                                 </div>
 
                             </div>
@@ -304,7 +338,7 @@ VALUES('$product_id','$aesthetic_id')
                             <div class="field is-grouped">
                                 <div class="control">
                                     <button class="button is-primary" type="submit" name="submit">
-                                        Add Product
+                                        Edit Product
                                     </button>
                                 </div>
 

@@ -16,10 +16,11 @@ body {
     background: #fff;
     grid-template-columns: 65px 1fr;
     /*Grid stuff*/
-    grid-template-areas: auto 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-areas: auto 1fr 1fr;
+    grid-template-rows: auto auto 1fr;
     grid-template-areas: 
-    "sidebar main"
+    "sidebar navbar"
+    "sidebar main";
     /*Use this instead if youre deleting categories tab ` a page
     grid-template-areas: auto 1fr 1fr;
     grid-template-rows: auto 1fr;
@@ -120,12 +121,68 @@ body {
     border-radius: 4px;
 }
 
+.navbar {
+    grid-area: navbar;
+    position: sticky;
+    top: 0;
+    height: 100px;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 1px 1px 15px #395c53;
+    z-index: 1;
+    padding-left: 20px;
+    padding-top: 5px;
+}
+
+.navbar-links {
+    padding: 10px;
+}
+
+.search {
+    --padding: 15px;
+
+    width: max-content;
+    display: flex;
+    align-items: center;
+    padding: var(--padding);
+    border-radius: 28px;
+    background: #c0d4cf;
+    min-width: 50rem;
+    transition: all .2s ease;
+}
+
+.search:hover {
+    background: #90a7a0;
+}
+
+.search-input {
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    margin-left: var(--padding);
+    outline: none;
+    border: none;
+    background: transparent;
+    flex: 1;
+}
+
+input[type=search]::-ms-clear { display: none; width : 0; height: 0; }
+input[type=search]::-ms-reveal { display: none; width : 0; height: 0; }
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+    display: none;
+}
+
+
+.search-input::placeholder {
+    color: rgba(0, 0, 0, 0.25);
+}
+
 main {
     grid-area: main;
     padding: 1rem;
     background: #fff;
 }
 
-/* main .main-content {
-
-}

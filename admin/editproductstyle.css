@@ -126,3 +126,22 @@ main {
     background: #fff;
 }
 
+main .content {
+    justify-content: center;
+    align-items: center;
+}
+
+.columns .column .register {
+    text-align: right;
+}
+
+.field button input {
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    outline: none;
+}
+
+.control .icon i {
+    color: #c0d4cf;
+}

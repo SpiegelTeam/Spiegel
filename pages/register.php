@@ -1,6 +1,6 @@
 <?php
 session_start(); // Mandatory for session variables
-include "../db.php";
+include "../config/db.php";
 $message = "";
 
 if (isset($_POST['submit'])) {

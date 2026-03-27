@@ -1,7 +1,50 @@
 <?php
 include("config/session.php");
 require("config/db.php");
-ob_start();
+require("assets/product_card.php");
+// ================= CART HANDLER =================
+if (isset($_POST['add_to_cart'])) {
+    $product_id = intval($_POST['product_id']);
+
+    if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = [];
+    }
+
+    if (isset($_SESSION['cart'][$product_id])) {
+        $_SESSION['cart'][$product_id]++;
+    } else {
+        $_SESSION['cart'][$product_id] = 1;
+    }
+
+    header("Location: index.php");
+    exit();
+}
+// ================================================
+
+$search = "";
+$category = "";
+
+$sql = "SELECT DISTINCT p.* 
+        FROM products p
+        LEFT JOIN product_aesthetics pa ON p.item_id = pa.product_id
+        LEFT JOIN aesthetics a ON pa.aesthetic_id = a.aesthetic_id
+        WHERE 1=1";
+
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+    $search = mysqli_real_escape_string($conn, $_GET['search']);
+    $sql .= " AND (p.product_name LIKE '%$search%' 
+                OR p.description LIKE '%$search%' 
+                OR p.gender LIKE '%$search%')";
+}
+
+if (isset($_GET['category']) && !empty($_GET['category'])) {
+    $category = mysqli_real_escape_string($conn, $_GET['category']);
+    $sql .= " AND a.aesthetic_name = '$category'";
+}
+
+$result = mysqli_query($conn, $sql);
+
+$result = mysqli_query($conn, $sql);
 $message = "";
 if (isset($_POST['submit'])) {
     $email = trim($_POST['email']);
@@ -44,6 +87,7 @@ if (isset($_POST['submit'])) {
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="assets/product_cardstyle.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -65,15 +109,7 @@ if (isset($_POST['submit'])) {
                 </a>
             </li>
             <li>
-                <a href="pages/reflections.html">
-                    <span class="material-icons">
-                        window
-                    </span>
-                    Reflections
-                </a>
-            </li>
-            <li>
-                <a href="pages/cart.html">
+                <a href="pages/cart.php">
                     <span class="material-icons">
                         shopping_cart
                     </span>
@@ -82,24 +118,22 @@ if (isset($_POST['submit'])) {
             </li>
             <div class="sidebar-bottom">
                 <h4><span>Own Your Reflection</span></h4>
-                <li>
-                    <a href="pages/settings.html">
-                        <span class="material-icons">
-                            settings
-                        </span>
-                        Settings
-                    </a>
-                </li>
             </div>
         </ul>
     </aside>
 
     <nav class="navbar">
         <ul class="navbar-links">
-            <form>
+            <form method="GET">
                 <div class="search">
                     <span class="search-icon material-icons">search</span>
-                    <input class="search-input" type="search" placeholder="Search" spellcheck="false">
+                    <input
+                        class="search-input"
+                        type="search"
+                        name="search"
+                        placeholder="Search"
+                        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
+                        spellcheck="false">
                 </div>
             </form>
             <div class="user-account">
@@ -112,52 +146,67 @@ if (isset($_POST['submit'])) {
         </ul>
     </nav>
 
+
+    <?php $currentCategory = $_GET['category'] ?? ''; ?>
     <nav class="categories">
+
         <ul>
-            <li><a class="active" href="#">ALL</a></li>
-            <li><a href="#">MAIN AESTHETICS
-                    <ul>
-                        <li><a href="#">Casual</a></li>
-                        <li><a href="#">Formal</a></li>
-                        <li><a href="#">Streetwear</a></li>
-                        <li><a href="#">Y2K</a></li>
-                        <li><a href="#">Indie</a></li>
-                        <li><a href="#">Kawaii</a></li>
-                        <li><a href="#">Baddie</a></li>
-                        <li><a href="#">Visco</a></li>
-                        <li><a href="#">80s & 90s</a></li>
-                        <li><a href="#">Vintage</a></li>
-                    </ul>
-                </a></li>
-            <li><a href="#">SUB-CULTURE AESTHETICS</a>
+            <li>
+                <a href="index.php?search=<?php echo urlencode($search); ?>" class="active">
+                    ALL
+                </a>
+            </li>
+
+            <li>
+                <a href="#">MAIN AESTHETICS</a>
                 <ul>
-                    <li><a href="#">Academia</a></li>
-                    <li><a href="#">Coquette</a></li>
-                    <li><a href="#">Soft Boy</a></li>
-                    <li><a href="#">Soft Girl</a></li>
-                    <li><a href="#">Wednesday</a></li>
-                    <li><a href="#">Korean</a></li>
-                    <li><a href="#">Art Hoe</a></li>
+                    <li><a href="?category=Casual&search=<?php echo urlencode($search); ?>">Casual</a></li>
+                    <li><a href="?category=Formal&search=<?php echo urlencode($search); ?>">Formal</a></li>
+                    <li><a href="?category=Streetwear&search=<?php echo urlencode($search); ?>">Streetwear</a></li>
+                    <li><a href="?category=Y2K&search=<?php echo urlencode($search); ?>">Y2K</a></li>
+                    <li><a href="?category=Indie&search=<?php echo urlencode($search); ?>">Indie</a></li>
+                    <li><a href="?category=Kawaii&search=<?php echo urlencode($search); ?>">Kawaii</a></li>
+                    <li><a href="?category=Baddie&search=<?php echo urlencode($search); ?>">Baddie</a></li>
+                    <li><a href="?category=Visco&search=<?php echo urlencode($search); ?>">Visco</a></li>
+                    <li><a href="?category=80s%20%26%2090s&search=<?php echo urlencode($search); ?>">80s & 90s</a></li>
+                    <li><a href="?category=Vintage&search=<?php echo urlencode($search); ?>">Vintage</a></li>
                 </ul>
             </li>
-            <li><a href="#">ALT AESTHETICS</a>
+
+            <li>
+                <a href="#">SUB-CULTURE AESTHETICS</a>
                 <ul>
-                    <li><a href="#">Grunge</a></li>
-                    <li><a href="#">E-Girl</a></li>
-                    <li><a href="#">Goth</a></li>
-                    <li><a href="#">Pastel</a></li>
-                    <li><a href="#">Edgy</a></li>
+                    <li><a href="?category=Academia&search=<?php echo urlencode($search); ?>">Academia</a></li>
+                    <li><a href="?category=Coquette&search=<?php echo urlencode($search); ?>">Coquette</a></li>
+                    <li><a href="?category=Soft%20Boy&search=<?php echo urlencode($search); ?>">Soft Boy</a></li>
+                    <li><a href="?category=Soft%20Girl&search=<?php echo urlencode($search); ?>">Soft Girl</a></li>
+                    <li><a href="?category=Wednesday&search=<?php echo urlencode($search); ?>">Wednesday</a></li>
+                    <li><a href="?category=Korean&search=<?php echo urlencode($search); ?>">Korean</a></li>
+                    <li><a href="?category=Art%20Hoe&search=<?php echo urlencode($search); ?>">Art Hoe</a></li>
                 </ul>
             </li>
-            <li><a href="#">CORE AESTHETICS</a>
+
+            <li>
+                <a href="#">ALT AESTHETICS</a>
                 <ul>
-                    <li><a href="#">Sanriocore</a></li>
-                    <li><a href="#">Cottagecore</a></li>
-                    <li><a href="#">Kidcore</a></li>
-                    <li><a href="#">Goblincore</a></li>
-                    <li><a href="#">Fairycore</a></li>
-                    <li><a href="#">Angelcore</a></li>
-                    <li><a href="#">Grandmacore</a></li>
+                    <li><a href="?category=Grunge&search=<?php echo urlencode($search); ?>">Grunge</a></li>
+                    <li><a href="?category=E-Girl&search=<?php echo urlencode($search); ?>">E-Girl</a></li>
+                    <li><a href="?category=Goth&search=<?php echo urlencode($search); ?>">Goth</a></li>
+                    <li><a href="?category=Pastel&search=<?php echo urlencode($search); ?>">Pastel</a></li>
+                    <li><a href="?category=Edgy&search=<?php echo urlencode($search); ?>">Edgy</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#">CORE AESTHETICS</a>
+                <ul>
+                    <li><a href="?category=Sanriocore&search=<?php echo urlencode($search); ?>">Sanriocore</a></li>
+                    <li><a href="?category=Cottagecore&search=<?php echo urlencode($search); ?>">Cottagecore</a></li>
+                    <li><a href="?category=Kidcore&search=<?php echo urlencode($search); ?>">Kidcore</a></li>
+                    <li><a href="?category=Goblincore&search=<?php echo urlencode($search); ?>">Goblincore</a></li>
+                    <li><a href="?category=Fairycore&search=<?php echo urlencode($search); ?>">Fairycore</a></li>
+                    <li><a href="?category=Angelcore&search=<?php echo urlencode($search); ?>">Angelcore</a></li>
+                    <li><a href="?category=Grandmacore&search=<?php echo urlencode($search); ?>">Grandmacore</a></li>
                 </ul>
             </li>
         </ul>
@@ -166,35 +215,17 @@ if (isset($_POST['submit'])) {
     <main class="main-container">
         <div class="main-content">
 
-            <div class="grid is-col-min-9">
-                <div class="cell">
-                    <div class="card has-background-primary-dark">
-                        <div class="card-image">
-                            <figure class="image is-3by5">
-                                <img
-                                    src="images/random_filler.png"
-                                    alt="Placeholder image" />
-                            </figure>
-                        </div>
-                        <div class="card-content">
-                            <div class="media">
-                                <div class="media-content">
-                                    <p class="title is-4">product title</p>
-                                    <p class="is-size-6 mb-2">product description</p>
-                                    <div class="fixed-grid">
-                                        <div class="grid is-size-7">
-                                            <div class="cell">product quantity</div>
-                                            <div class="cell price-right">product price</div>
-                                        </div>
-                                    </div>
-                                    <a href="#"><button class="button is-primary mt-5">Add to Cart</button></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="products-container">
 
+                <?php if ($result->num_rows > 0): ?>
+                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                        <?php renderProduct($row); ?>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <p>No products found.</p>
+                <?php endif; ?>
+
+            </div>
         </div>
     </main>
 
@@ -222,7 +253,7 @@ if (isset($_POST['submit'])) {
                                                 </label>
                                             </div>
                                             <div class="column register">
-                                                <a href="../pages/register.php" class="has-text-primary-light">
+                                                <a href="pages/register.php" class="has-text-primary-light">
                                                     No Account? Sign Up Here
                                                 </a>
                                             </div>
